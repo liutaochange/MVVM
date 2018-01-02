@@ -4,7 +4,7 @@
 
 把Model和View关联起来的就是ViewModel。ViewModel负责把Model的数据同步到View显示出来，还负责把View的修改同步回Model。MVVM的设计思想：关注Model的变化，让MVVM框架去自动更新DOM的状态，从而把开发者从操作DOM的繁琐步骤中解脱出来！
 
-> 理解MVVM的原理之前，我们先来回顾下数据绑定。数据绑定是指页面UI布局与数据源建立连接的过程。
+> 理解MVVM的原理之前，我们先来回顾下数据绑定，数据绑定是指页面UI布局与数据源建立连接的过程。
 
 单向数据绑定：指的是我们先把Template(模板)写好，然后把Template(模板)和Model(数据）整合到一起形成HTML代码，然后把这段HTML代码插入到文档流里面,形成完整的View(视图)。如下图所示：
 
@@ -55,17 +55,13 @@ console.log(obj.name);//web
 
 ```
 
-前两个参数就不用过多解释了，一看就明白了，我们重点分析一下第三个参数
+前两个参数就不用过多解释了，一看就明白了，我们重点分析一下第三个参数 descriptor
 
-
-```
-descriptor
-```
 
 它有以下取值：
 
 ```
-value：该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等）。默认为 undefined。
+value：该属性对应的值可以是任何有效的 JavaScript 值（数值，对象，函数等）。默认为 undefined。
 
 writable：当且仅当该属性的writable为true时，value才能被赋值运算符改变。默认为 false。
 
@@ -166,7 +162,6 @@ for...in 类似，不赘述了
 
 通俗的说，在 descriptor 中不能同时设置访问器（get 和 set）和 wriable 或 value，否则会错，就是说想用 get 和 set，就不能用 writable 或 value 中的任何一个。
 
-set 和 get，他俩干啥用的的。
 
 ```
 var new_obj = {}
@@ -191,15 +186,15 @@ console.log(new_obj.num)    //开始取值  100 注意这里，和我直接返�
 
 因此需要我们执行以下3个步骤，实现数据的双向绑定：
 
-1、实现一个数据监听器Observer，能够对数据对象的所有属性进行监听，如有变动可拿到最新值并通知订阅者，[查看代码，observer.js](http://note.youdao.com/)
+1、实现一个数据监听器Observer，能够对数据对象的所有属性进行监听，如有变动可拿到最新值并通知订阅者，[查看代码，observer.js](https://github.com/liutaochange/MVVM/blob/master/js/observer.js)
 
-2、实现一个指令解析器Compile，对每个元素节点的指令进行扫描和解析，根据指令模板替换数据，以及绑定相应的更新函数，[查看代码，compile.js](http://note.youdao.com/)
+2、实现一个指令解析器Compile，对每个元素节点的指令进行扫描和解析，根据指令模板替换数据，以及绑定相应的更新函数，[查看代码，compile.js](https://github.com/liutaochange/MVVM/blob/master/js/compile.js)
 
-3、实现一个Watcher，作为连接Observer和Compile的桥梁，能够订阅并收到每个属性变动的通知，执行指令绑定的相应回调函数，从而更新视图，[查看代码，watcher.js](http://note.youdao.com/)
+3、实现一个Watcher，作为连接Observer和Compile的桥梁，能够订阅并收到每个属性变动的通知，执行指令绑定的相应回调函数，从而更新视图，[查看代码，watcher.js](https://github.com/liutaochange/MVVM/blob/master/js/watcher.js)
 
 实现mvvm的主入口：
 
-MVVM作为数据绑定的入口，整合Observer、Compile和Watcher三者，通过Observer来监听自己的model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化 -> 视图更新；视图交互变化(input) -> 数据model变更的双向绑定效果。
+> MVVM作为数据绑定的入口，整合Observer、Compile和Watcher三者，通过Observer来监听自己的model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化 -> 视图更新；视图交互变化(input) -> 数据model变更的双向绑定效果。
 
 
 ```
@@ -257,8 +252,9 @@ MVVM.prototype = {
     }
 };
 ```
+[查看mvvm入口代码，mvvm.js](https://github.com/liutaochange/MVVM/blob/master/js/mvvm.js)
 
-最后，运行如下代码，试试效果
+最后，在页面里引用如下代码，运行试试效果
 
 
 ```
