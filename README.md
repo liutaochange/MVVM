@@ -273,14 +273,14 @@ MVVM.prototype = {
 <script src="./js/compile.js"></script>
 <script src="./js/mvvm.js"></script>
 <script>
-var vm = new MVVM({
+    var vm = new MVVM({
         el: '#app',
         data: {
             word: 'Hello World!'
         },
         methods: {
-            sayHi: function() {
-                this.word = 'Hi, everybody!';
+            reverseMessage: function () {
+                this.word = this.word.split('').reverse().join('')
             }
         }
     });
